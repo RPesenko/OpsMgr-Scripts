@@ -11,6 +11,8 @@
            Action is optional, accepted values are 'add' and 'remove', otherwise leave empty
            Name of MG is required for actions 'add' or 'remove', otherwise leave empty
            Name of MS is required for 'add', otherwise leave empty
+
+   ** This script is provided 'as is' with no warranty, express or implied ** 
 #>
 
 Param (
