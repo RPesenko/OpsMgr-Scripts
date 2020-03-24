@@ -44,7 +44,7 @@ Once the certificate has been installed, you should verify that it meets all the
 
 My colleague, Tyson Paul, has written a very useful script to verify if any of the certificates installed in the local machine store meet all the requirements for certificate authentication in SCOM.  The script is included in this respository as _**OMCertCheck.ps1**_ 
 
-The original link for this script and additional documentation can be found at https://gallery.technet.microsoft.com/scriptcenter/Troubleshooting-OpsMgr-27be19d3 
+_(The original link for this script and additional documentation can be found at https://gallery.technet.microsoft.com/scriptcenter/Troubleshooting-OpsMgr-27be19d3 )_
 
 ## Manual installation of Workgroup Agents
 There is a PDF file in this repository named _**Workgroup Agent Deployment Process.PDF**_ 
