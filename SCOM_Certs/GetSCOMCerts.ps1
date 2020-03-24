@@ -1,3 +1,8 @@
+<#
+  GetSCOMCerts.ps1
+  Ver: 2020-03-23
+#>
+
 PARAM
 (
 	[Parameter(Mandatory=$true)][string] $HostName, 
