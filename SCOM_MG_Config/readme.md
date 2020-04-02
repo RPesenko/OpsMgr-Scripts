@@ -29,3 +29,8 @@ Remove an existing Management group from the agent configuration.  Each line has
 > **Example:**  
 _[FQDN]_,remove,_[Management Group Name]_
 
+## Additional Notes
+The same agent can be removed from one Management Group on one line and added to another Management Group on another line in the same CSV file.  This is useful in situations where a number of manually installed agents are being migrated from one Management Group to another.
+> **Example:**  
+_`Agent1234.Contoso.com`_,add,_`NewContosoMG`,`MS01.Contoso.com`_
+_`Agent1234.Contoso.com`_,remove,_`OldContosoMG`_
