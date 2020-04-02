@@ -27,25 +27,36 @@ Function ListMG {
     Try {
         # Connect to remote computer
         Write-Host "Listing Configuration for" $RemoteComputer -ForegroundColor Yellow
-        Invoke-Command -ComputerName $RemoteComputer -ErrorAction Stop -ScriptBlock { 
-            Try {
-                $objAgent = New-Object -ComObject AgentConfigManager.MgmtSvcCfg -ErrorAction Stop
-            }
-            Catch {
-                Write-Host "  Enumeration Failure: " ($_.Exception).Message -ForegroundColor Red
-            }
+        $Ping = (Test-Connection $RemoteComputer -Count 1 -Quiet)
+        If ($Ping) {
+            Invoke-Command -ComputerName $RemoteComputer -ErrorAction Stop -ScriptBlock { 
+                Try {
+                    $objAgent = New-Object -ComObject AgentConfigManager.MgmtSvcCfg -ErrorAction Stop
+                }
+                Catch [System.Runtime.InteropServices.COMException]{
+                    Write-Host "  Error: Agent not installed" -ForegroundColor Red
+                    Continue
+                }
+                Catch {
+                    Write-Host "  Enumeration Failure: " ($_.Exception).Message -ForegroundColor Red
+                    Continue
+                }
 
-            # Get list of SCOM Management Groups (will be empty if only OMS agent)
-            $MGList = @($objAgent.GetManagementGroups() )
-            If ($MGList.Count -eq 0) {
-                Write-Host "  No SCOM Management Groups configured.  May be OMS agent." -ForegroundColor Cyan
-            }
-            Else {
-                Foreach ($MG in $MGList) {
+                # Get list of SCOM Management Groups (will be empty if only OMS agent)
+                $MGList = @($objAgent.GetManagementGroups() )
+                If ($MGList.Count -eq 0) {
+                    Write-Host "  No SCOM Management Groups configured.  May be OMS agent." -ForegroundColor Cyan
+                }
+                Else {
+                    Foreach ($MG in $MGList) {
                     Write-Host "  Management Group: " $MG.ManagementGroupName
                     Write-Host "    Management Server: " $MG.ManagementServer
+                    }
                 }
             }
+        }
+        Else {
+            Write-Host " Network Error: $RemoteComputer not found or not accessible on network" -ForegroundColor Red
         }
     }
     Catch {
@@ -179,6 +190,10 @@ foreach ($line in $content) {
     $MG = $line.Split(',')[2]
     $MS = $line.Split(',')[3]
 
+    If ($computer -eq "") {
+        Continue
+    }
+    
     If ($action -like "*add*") {
         If (($MG -ne $null) -and ($MS -ne $null)){
             Write-Host "Performing action:" $action "for computer:" $computer "with MG:" $MG "and MS:" $MS -ForegroundColor Yellow

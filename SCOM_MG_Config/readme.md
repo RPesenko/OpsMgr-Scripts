@@ -1,6 +1,13 @@
 # SCOM MG Config
 This script can be used to view or change management group configuration for a list of Operations Manager agents via the remote COM object. 
 
+## Use Cases
+Ideally, a SCOM administrator should view, change, add or remove management group configuration on the agent using the Operations Manager Console.  If the agent was manually installed, or network configuration prevents agent push from succeeding (remotely manageable = $false), the only available option would be to logon locally to each agent and view, change, add or remove management group information from control panel.
+
+This script leverages the agent's COM API to display the current configuration for each management group, or make changes to the existing configuration.  Rather than logon to a large number of servers individually to make changes, the script allows a SCOM administrator to make changes in a few seconds what would normally take and hour or longer to do.
+
+The script still requires the same level of network access and permissions as making the changes manually, but using the script makes the configuration change far more efficient.
+
 ## Requirements
 - The script accepts the path to a CSV file as the only parameter. 
 - The script can be run from any workstation, but needs to have RPC connectivity to the remote agents listed in the CSV.
