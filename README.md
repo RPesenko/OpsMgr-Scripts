@@ -10,3 +10,5 @@ A collection of useful PowerShell scripts for Operations Manager administrators
 **ExtendMM** : Script to display, end or modify existing SCOM Maintenance Mode windows.  
 
 **MMAlert** : Script to alert when a long Maintenance Mode window is ending in less than 24 hours.
+
+**List_Schan** : List or modify SChannel protocol settings on the local server.
