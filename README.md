@@ -12,3 +12,5 @@ A collection of useful PowerShell scripts for Operations Manager administrators
 **SCOM_Certs** : Scripts and instructions to help install agents in workgroups, non-trusted domains and perimeter networks
 
 **SCOM_MG_Config** : Add, Remove or Display SCOM MG for CSV list of computers
+
+**ShowTLSStatus** : Quickly displays key registry values related to TLS 1.2 only configuration
