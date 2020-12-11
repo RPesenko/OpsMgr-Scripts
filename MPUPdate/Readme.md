@@ -19,3 +19,7 @@ Note: Many Management Packs are only updated through Update Rollups or are not o
 [ManagementServer] = Optional parameter.  The Management Server to connect to when obtaining the list of Management Packs.  If no MS is specified, the script will use the existing connection or try to connect to localhost.
 
 [FileName] = Optional parameter.  The full path to the xml file where the Management Pack catalog was saved.  
+
+### Download Script Bundle:   
+https://github.com/RPesenko/OpsMgr-Scripts/releases/download/1.4/MPUpdates.zip
+
