@@ -42,8 +42,6 @@ foreach($Protocol in $ProtocolList)
             Write-Host $Protocol " : " $key
             Write-Host "  Registry path exists" -ForegroundColor Green
 
-            $EnabledVal = $currentRegPath + "\" + $Enabled
-            $DbyDVal = $currentRegPath + "\" + $DisabledByDefault
             If (Get-ItemProperty -Path $currentRegPath -Name Enabled -ErrorAction SilentlyContinue) {
                 Write-Host "    Value of Enabled: " (Get-ItemProperty -Path $currentRegPath).Enabled -ForegroundColor Green
             }
