@@ -27,5 +27,5 @@ To redirect output to a text file, use this context:
 `.\CheckMPUpdates.ps1 MSServer *> .\MG01.Log`
 
 ### Download Script Bundle:   
-https://github.com/RPesenko/OpsMgr-Scripts/releases/download/1.4/MPUpdates.zip
+https://github.com/RPesenko/OpsMgr-Scripts/blob/master/MPUPdate/MPUpdates.zip
 

@@ -15,3 +15,6 @@ Many enterprises have security requirements to disable certain SChannel protocol
 **Note 1:** This script must be run under elevated credentials to read the registry.
 
 **Note 2:** Many applications and workloads may require additional settings and configurations to run properly in an environment where certain SChannel protocols are disabled and the OS has been hardened.  Please refer to your vendor's documentation for full compatibility requirements.
+
+### Download Script Here:
+https://github.com/RPesenko/OpsMgr-Scripts/blob/master/ShowTLSStatus/ShowTLSStatus.ps1
