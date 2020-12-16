@@ -22,5 +22,5 @@ Run the script with the *onlyTLS12* parameter to create any missing registry key
 
 **Example:**  List_Schan.ps1 onlyTLS12
 
-
-
+### Download Script Here:
+https://github.com/RPesenko/OpsMgr-Scripts/blob/master/List_Schannel/List_Schan.ps1

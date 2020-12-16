@@ -34,3 +34,6 @@ The same agent can be removed from one Management Group on one line and added to
 > **Example:**  
 _`Agent1234.Contoso.com`_,add,_`NewContosoMG`,`MS01.Contoso.com`_
 _`Agent1234.Contoso.com`_,remove,_`OldContosoMG`_
+
+### Download Script Here:
+https://github.com/RPesenko/OpsMgr-Scripts/blob/master/SCOM_MG_Config/SCOM_MG_Config.ps1

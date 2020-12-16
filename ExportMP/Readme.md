@@ -10,3 +10,7 @@ The script uses the folowing parameters:
  A child folder with the day's date (in YYYY-MM-DD format) will be created at the parent folder specfied above.  If a child folder for today's date already exists, it will be overwritten.
 
  Version: 2020/03/23
+
+ ### Download Script Here 
+ https://github.com/RPesenko/OpsMgr-Scripts/blob/master/ExportMP/ExportMPs.ps1
+ 

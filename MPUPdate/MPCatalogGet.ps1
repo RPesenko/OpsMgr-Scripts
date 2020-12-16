@@ -10,6 +10,10 @@ Param (
     [string] $Folder = "C:\temp"
 )
 
+If (!(Test-path $folder)){
+	New-item -Path $folder -itemtype Directory
+}
+
 $Filename = "MPCatalog.XML"
 $OutFile = $Folder + "\" + $Filename
 
@@ -34,6 +38,10 @@ $message = @"
     </soap12:Body>
 </soap12:Envelope>
 "@
+
+$Wcl = new-object System.Net.WebClient
+$Wcl.Headers.Add(“user-agent”, “PowerShell Script”)
+$Wcl.Proxy.Credentials = [System.Net.CredentialCache]::DefaultNetworkCredentials
 
 $req = [system.Net.HttpWebRequest]::Create($url)
 $req.Headers.Add("SOAPAction", "http://microsoft.com/webservices/FindManagementPacks")

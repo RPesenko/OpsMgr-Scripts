@@ -41,3 +41,6 @@ List all computers in the file specified by [file] and indicate if they are in S
 
 **ExtendMM.ps1 -MMList [file] -extend -time 180**  
 List all computers in the file specified by [file] and indicate if they are in SCOM maintainence mode.  If so, when MM started and was originally scheduled to end.  The new end time will be extended by 180 minutes from the scheduled end time for all computers in the list.
+
+### Download Script Here:
+https://github.com/RPesenko/OpsMgr-Scripts/blob/master/ExtendMM/ExtendMM.ps1

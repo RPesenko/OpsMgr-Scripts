@@ -11,7 +11,9 @@ This script is used to connect to the Management Pack Catalog web service and pu
 # CheckMPUdates.ps1
 This script reads the MP Catalog information from 'MPCatalog.xml' and compares the version of each installed Managment Pack in the Management Group to the latest version published in the catalog.  If the installed version has the same version number as that in the catalog, the MP is indicated as being 'current', otherwise, the most recent version and release date of the MP is given.  
 
-Note: Many Management Packs are only updated through Update Rollups or are not otherwise published to the catalog.  These MP will be listed as 'No Updates Published', for completeness.
+**Note 1:** Many Management Packs are only updated through Update Rollups or are not otherwise published to the catalog.  These MP will be listed as 'No Updates Published', for completeness.
+
+**Note 2:** For best results, run this script on the Operations Manager Console.
 
 ## Usage:
 **CheckMPUpdates.ps1** *[-MSConnection ManagementServer] [-InputFile FileName]*
@@ -20,6 +22,10 @@ Note: Many Management Packs are only updated through Update Rollups or are not o
 
 [FileName] = Optional parameter.  The full path to the xml file where the Management Pack catalog was saved.  
 
+To redirect output to a text file, use this context:
+
+`.\CheckMPUpdates.ps1 MSServer *> .\MG01.Log`
+
 ### Download Script Bundle:   
-https://github.com/RPesenko/OpsMgr-Scripts/releases/download/1.4/MPUpdates.zip
+https://github.com/RPesenko/OpsMgr-Scripts/blob/master/MPUPdate/MPUpdates.zip
 
