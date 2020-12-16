@@ -1,9 +1,12 @@
-﻿<#  MPCatalogGet.ps1
+﻿<#  
+MPCatalogGet.ps1
+    Version: 1.1    
+    Release 2020/12/16
 
-    Script to get offline copy of MP Catalog for comparison to installed MP
-    Designed for use when MS is not online and native Updates and Recommendation feature can't be used.
-    SCOM 2012/2016/2019 version update :  Rich Pesenko 12/8/2020
-    Based on Check-MPUpdates.ps1 by Daniele Muscetta 8/12/2009 (https://www.muscetta.com/2008/11/29/programmatically-check-for-management-pack-updates-in-opsmgr-2007-r2/)
+Script to get offline copy of MP Catalog for comparison to installed MP
+Designed for use when MS is not online and native Updates and Recommendation feature can't be used.
+SCOM 2012/2016/2019 version update :  Rich Pesenko 12/8/2020
+Based on Check-MPUpdates.ps1 by Daniele Muscetta 8/12/2009 (https://www.muscetta.com/2008/11/29/programmatically-check-for-management-pack-updates-in-opsmgr-2007-r2/)
 #>
 
 Param (

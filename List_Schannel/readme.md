@@ -1,4 +1,7 @@
 # List_SChan.ps1
+Version: 1.1    
+Release 2020/12/16
+
 Display SChannel protocol settings for a Windows computer
 
 ## Purpose
@@ -24,3 +27,7 @@ Run the script with the *onlyTLS12* parameter to create any missing registry key
 
 ### Download Script Here:
 https://github.com/RPesenko/OpsMgr-Scripts/blob/master/List_Schannel/List_Schan.ps1
+
+Change Log  
+1.1: Updates to documentation   
+1.0: Initial release 

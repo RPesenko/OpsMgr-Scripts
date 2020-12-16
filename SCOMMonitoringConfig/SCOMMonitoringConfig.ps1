@@ -1,6 +1,8 @@
 <#
-  SCOMMonitoringConfig : v2.1
-  Runs Get-SCOMEffectiveMonitoringConfiguration and formats output to HTML 5 compliant file.
+SCOMMonitoringConfig
+    Version: 2.1    
+    Release 2020/12/16
+Runs Get-SCOMEffectiveMonitoringConfiguration and formats output to HTML 5 compliant file.
 #>
 
   Param (

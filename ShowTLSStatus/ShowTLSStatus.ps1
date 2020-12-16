@@ -1,9 +1,11 @@
 ﻿<# 
-    ShowTLSStatus.ps1
+ShowTLSStatus.ps1
+    Version: 1.1    
+    Release 2020/12/16
     
-    Displays certain key registry settings required for TLS 1.2 only support 
-    Note:  This is a quick check of key registry settings for OS
-           Certain applications may require additional configurations
+Displays certain key registry settings required for TLS 1.2 only support 
+Note:  This is a quick check of key registry settings for OS
+        Certain applications may require additional configurations
 #>
 
 # =============================================

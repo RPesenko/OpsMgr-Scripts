@@ -1,6 +1,9 @@
 <#
-  CheckMPUpdates : v1.0
-  Checks for updates to installed sealed MP from previously downloaded catalog file
+CheckMPUpdates.ps1
+    Version: 2.2    
+    Release 2020/12/16
+
+Checks for updates to installed sealed MP from previously downloaded catalog file
 #>
 
 Param (

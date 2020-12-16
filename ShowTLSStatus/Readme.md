@@ -1,4 +1,7 @@
 # ShowTLSStatus
+Version: 1.1    
+Release 2020/12/16
+
 Many enterprises have security requirements to disable certain SChannel protocols or harden the OS against attack.  This may affect the ability of some applications and workloads to communicate properly over the network.  This script can quickly show key registry settings related to these configuration settings without requiring administrators to leverage the Regististry Editor.
 
 - The key **"HKLM:\\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full\release"** is checked to verify the server is at .NET 4.6 or later
@@ -18,3 +21,7 @@ Many enterprises have security requirements to disable certain SChannel protocol
 
 ### Download Script Here:
 https://github.com/RPesenko/OpsMgr-Scripts/blob/master/ShowTLSStatus/ShowTLSStatus.ps1
+
+Change Log  
+1.1: Updates to documentation   
+1.0: Initial release   

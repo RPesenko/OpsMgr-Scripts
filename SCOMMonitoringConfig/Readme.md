@@ -12,3 +12,6 @@ The script uses the folowing parameters:
 ### Download Script Here 
 https://github.com/RPesenko/OpsMgr-Scripts/blob/master/SCOMMonitoringConfig/SCOMMonitoringConfig.ps1
  
+Change Log  
+2.1: Improved MG connection logic   
+1.0: Initial release    

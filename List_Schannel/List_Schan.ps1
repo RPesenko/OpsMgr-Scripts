@@ -1,11 +1,14 @@
 <#
-    List_Schan.PS1  
-    Purpose: Display or modify the SChannel registry settings on a Windows Server
+List_Schan.ps1
+    Version: 1.1    
+    Release 2020/12/16
+  
+ Purpose: Display or modify the SChannel registry settings on a Windows Server
 
-    Parameter:
-        $create     :  Create registry settings if missing, all set to enabled
-        $onlyTLS12  :  Create registry settings if missing, only set TLS 1.2 enabled
-        <none>/default : only display the values of the keys, or if they exist
+Parameter:
+    $create     :  Create registry settings if missing, all set to enabled
+    $onlyTLS12  :  Create registry settings if missing, only set TLS 1.2 enabled
+    <none>/default : only display the values of the keys, or if they exist
 #>
 
 PARAM (
