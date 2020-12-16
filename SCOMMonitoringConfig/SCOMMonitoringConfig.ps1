@@ -1,10 +1,10 @@
 <#
-  SCOMMonitoringConfig : v2.0
+  SCOMMonitoringConfig : v2.1
   Runs Get-SCOMEffectiveMonitoringConfiguration and formats output to HTML 5 compliant file.
 #>
 
   Param (
-    [string] $MS = "localhost",
+    [string] $MS,
     [string] $FolderPath = "C:\ScomConfig\",
     [Parameter(Mandatory=$true)][string] $AgentFQDN 
 )
@@ -53,41 +53,6 @@ for (i = 0; i < coll.length; i++) {`
 
 # ===============================================================================================
 # functions
-function GetRawCSV {
-    param (
-        $FileName 
-    )
-    
-    $RawCSV = Get-Content $FileName |sort |select -Skip 1
-
-    return $RawCSV
-}
-
-function GetConfig ($FolderPath, $AgentFQDN) {
-
-    If ($null -ne $AgentFQDN){
-        $Hostname = ($AgentFQDN.Split('.'))[0]
-        $outfile = $FolderPath + $Hostname + ".csv"
-        
-        # Create output folder
-        If (!(Test-Path -Path $FolderPath)) {
-            New-Item $FolderPath -Type Directory
-            Write-host "Creating folder $FolderPath for output" -ForegroundColor cyan  
-        }
-    
-        # Get config
-        Write-Host "Generating Configuration Information for $Hostname " -ForegroundColor Cyan
-        Write-Host "  (this may take a few minutes...) " -ForegroundColor Cyan
-        $SCOMclass = Get-SCOMClass -Name "System.Computer"
-        $agent = Get-SCOMClassInstance -Class $SCOMclass | Where-Object {$_.DisplayName -eq $AgentFQDN}
-        if ($agent){
-            Export-SCOMEffectiveMonitoringConfiguration -Instance $agent -Path $outfile -RecurseContainedObjects 
-        }
-    }
-
-    return $outfile
-}
-
 function GetSCOMModule ($MgmtServer){
 
     $Server = $MgmtServer
@@ -117,48 +82,26 @@ function ConnectToSDK ($MS) {
     }
 }
 
-function GetDisplayName {
-    $DisplayName = $null
-    $ID = $values[2]
-    $alerts = $values[4]
-    $type = $values[7]
-    $description = $values[8]
-    If ($type -eq 'rule'){
-        $DisplayName = (get-scomrule -name "$ID").displayname
-        If ($alerts -eq "true") {
-            $Workflow = "Alert Rule"
-        }
-        Else {
-            If (($description -like "*collect*")-or ($ID -like "*collect*")) {
-                $Workflow = "Collection Rule"
-            }
-            Else {
-                $Workflow = "Rule"
-            }
-        }
-    } 
-    Else {
-        $DisplayName = (get-scommonitor -name "$ID").displayname
-        Switch -Regex ($ID) {
-            "AvailabilityState$" {$Workflow = "Rollup Monitor"}
-            "ConfigurationState$" {$Workflow = "Rollup Monitor"}
-            "PerformanceState$" {$Workflow = "Rollup Monitor"}
-            "SecurityState$" {$Workflow = "Rollup Monitor"}
-            "EntityState$" {$Workflow = "Rollup Monitor"}
-            "Rollup$" {$Workflow = "Rollup Monitor"}
-            "Aggregate" {$Workflow = "Aggregate Monitor"}
-            "DependencyMonitor$" {$Workflow = "Dependency Monitor"}
-            default {$Workflow = "Unit Monitor"}
-        } 
+function GetAlertStatus {
+    If ($values[4] -eq 'True'){
+        $AlertStatus = "<td><b>Raises Alert</b><br>Severity: " + $values[5] + "<br>Priority: " +  $values[6] + "</td></tr>"
     }
-    If ($null -eq $DisplayName) {$DisplayName = $ID}
-    
-    $display = "<td width=75%><b>Display Name: <span style='color:blue;'>" + $DisplayName + "</span></b><br>"
-    $display += "<b>ID:</b> " + $ID + "<br>"
-    $display += "<b>Type:</b> " + $Workflow + "<br>"
-    $display += "<b>Description:</b> " + $description + "</td>"
+    Else {
+        $AlertStatus = "<td class='grey'><b>Alerting:</b> Does not alert</td></tr>"
+    }
 
-    return $display
+    return $AlertStatus
+}
+
+function GetEnabled {
+
+    Switch ($values[3]){
+        'false' {$enabled = "<td class='grey'><b>Enabled:</b> " + $values[3]  + "</td>"}
+        'true' {$enabled = "<td class='green'><b>Enabled:</b> " + $values[3]  + "</td>"}
+        default {$enabled = "<td class='green'><b>Enabled:</b> true (" + $values[3]  + ")</td>"}
+    }
+
+    return $enabled    
 }
 
 function GetOverrides {
@@ -211,33 +154,122 @@ function GetOverrides {
     return $AllOverrides
 }
 
-function GetAlertStatus {
-    If ($values[4] -eq 'True'){
-        $AlertStatus = "<td><b>Raises Alert</b><br>Severity: " + $values[5] + "<br>Priority: " +  $values[6] + "</td></tr>"
+function GetDisplayName {
+    $DisplayName = $null
+    $ID = $values[2]
+    $alerts = $values[4]
+    $type = $values[7]
+    $description = $values[8]
+    If ($type -eq 'rule'){
+        $DisplayName = (get-scomrule -name "$ID").displayname
+        If ($alerts -eq "true") {
+            $Workflow = "Alert Rule"
+        }
+        Else {
+            If (($description -like "*collect*")-or ($ID -like "*collect*")) {
+                $Workflow = "Collection Rule"
+            }
+            Else {
+                $Workflow = "Rule"
+            }
+        }
+    } 
+    Else {
+        $DisplayName = (get-scommonitor -name "$ID").displayname
+        Switch -Regex ($ID) {
+            "AvailabilityState$" {$Workflow = "Rollup Monitor"}
+            "ConfigurationState$" {$Workflow = "Rollup Monitor"}
+            "PerformanceState$" {$Workflow = "Rollup Monitor"}
+            "SecurityState$" {$Workflow = "Rollup Monitor"}
+            "EntityState$" {$Workflow = "Rollup Monitor"}
+            "Rollup$" {$Workflow = "Rollup Monitor"}
+            "Aggregate" {$Workflow = "Aggregate Monitor"}
+            "DependencyMonitor$" {$Workflow = "Dependency Monitor"}
+            default {$Workflow = "Unit Monitor"}
+        } 
+    }
+    If ($null -eq $DisplayName) {$DisplayName = $ID}
+    
+    $display = "<td width=75%><b>Display Name: <span style='color:blue;'>" + $DisplayName + "</span></b><br>"
+    $display += "<b>ID:</b> " + $ID + "<br>"
+    $display += "<b>Type:</b> " + $Workflow + "<br>"
+    $display += "<b>Description:</b> " + $description + "</td>"
+
+    return $display
+}
+
+function GetRawCSV {
+    param (
+        $FileName 
+    )
+    
+    $RawCSV = Get-Content $FileName |sort |select -Skip 1
+
+    return $RawCSV
+}
+
+function GetConfig ($FolderPath, $AgentFQDN) {
+
+    If ($null -ne $AgentFQDN){
+        $Hostname = ($AgentFQDN.Split('.'))[0]
+        $outfile = $FolderPath + $Hostname + ".csv"
+        
+        # Create output folder
+        If (!(Test-Path -Path $FolderPath)) {
+            New-Item $FolderPath -Type Directory
+            Write-host "Creating folder $FolderPath for output" -ForegroundColor cyan  
+        }
+    
+        # Get config
+        Write-Host "Generating Configuration Information for $Hostname " -ForegroundColor Cyan
+        Write-Host "  (this may take a few minutes...) " -ForegroundColor Cyan
+        $SCOMclass = Get-SCOMClass -Name "System.Computer"
+        $agent = Get-SCOMClassInstance -Class $SCOMclass | Where-Object {$_.DisplayName -eq $AgentFQDN}
+        if ($agent){
+            Export-SCOMEffectiveMonitoringConfiguration -Instance $agent -Path $outfile -RecurseContainedObjects 
+        }
+    }
+
+    return $outfile
+}
+
+function CheckMSConnect {
+    # Check connection to Management Group
+    $isConnected = Get-SCManagementGroupConnection
+    If (!$isConnected){
+        #  If not connected, connect to the required MS, or default to localhost
+        If (!$MSConnection){
+            ConnectToSDK "Localhost"
+        }
+        Else {
+            ConnectToSDK $MSConnection
+        }
     }
     Else {
-        $AlertStatus = "<td class='grey'><b>Alerting:</b> Does not alert</td></tr>"
+        #  If already connected, use existing connection or change connection to the required MS
+        If ((!$MSConnection) -or ($isConnected.ManagementServerName -eq $MSConnection)){
+            $connected = $isConnected |? {$_.IsActive}
+            # Check if the existing connection is active, if not, set it active.
+            If ($connected.ManagementServerName -eq $MSConnection){
+                Write-host "Connected to" $Connected.ManagementGroupName "on" $Connected.ManagementServerName -ForegroundColor Magenta
+            }
+            Else {
+                $isConnected |? {$_.ManagementServerName -eq $MSConnection} |Set-SCManagementGroupConnection
+                $connected = $isConnected |? {$_.IsActive}
+                Write-host "Connected to" $Connected.ManagementGroupName "on" $Connected.ManagementServerName -ForegroundColor Magenta
+            }
+        }
+        Else {
+            ConnectToSDK $MSConnection
+        }
     }
-
-    return $AlertStatus
+    
 }
-
-function GetEnabled {
-
-    Switch ($values[3]){
-        'false' {$enabled = "<td class='grey'><b>Enabled:</b> " + $values[3]  + "</td>"}
-        'true' {$enabled = "<td class='green'><b>Enabled:</b> " + $values[3]  + "</td>"}
-        default {$enabled = "<td class='green'><b>Enabled:</b> true (" + $values[3]  + ")</td>"}
-    }
-
-    return $enabled    
-}
-
 #---------------------------------------------------------------------
 # MAIN
 
-# Establish connection to Management Server  
-ConnectToSDK $MS
+# CHeck for established connection to Management Server  
+CheckMSConnect
 
 #Generate Effective Configuration CSV
 $output = GetConfig $FolderPath $AgentFQDN
