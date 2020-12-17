@@ -1,21 +1,21 @@
 <#
 SCOMMonitoringConfig
-    Version: 2.2    
+    Version: 2.3    
     Release 2020/12/17
 Runs Get-SCOMEffectiveMonitoringConfiguration and formats output to HTML 5 compliant file.
 #>
 
   Param (
-    [Parameter(Mandatory=$true)][string] $AgentFQDN,
-    [string] $MS,
-    [string] $FolderPath = "C:\SCOMFiles\ScomConfig\"
+    [Parameter(ParameterSetName='FormatOnly')][string] $FormatFile,
+    [Parameter(Mandatory=$true,ParameterSetName='GetConfig')][string] $AgentFQDN,
+    [Parameter(ParameterSetName='GetConfig')][string] $MS,
+    [Parameter(ParameterSetName='GetConfig')][string] $FolderPath = "C:\SCOMFiles\ScomConfig\"
 )
 
 # ===============================================================================================
 # Global Variables
 $body = $null
 $previnst=$null
-$Hostname = ($AgentFQDN.Split('.'))[0]
 
 # CSS Header format (HTML 5 compliant)
 $CSSHead = "<style> `
@@ -205,7 +205,14 @@ function GetRawCSV {
         $FileName 
     )
     
-    $RawCSV = Get-Content $FileName |sort |select -Skip 1
+    Try {
+        $RawCSV = Get-Content $FileName -ErrorAction stop|sort |select -Skip 1 
+    }
+    Catch {
+        Write-Host "Error getting configuration output" -ForegroundColor Red
+        Write-host $_.Exception.Message -ForegroundColor Red
+        Exit
+    }
 
     return $RawCSV
 }
@@ -269,16 +276,27 @@ function CheckMSConnect {
 }
 #---------------------------------------------------------------------
 # MAIN
+# Don't connect to MS if just formatting an existing file
+If ($FormatFile) {
+    $Hostname = (($FormatFile.Split('.')[0]).Split('\'))[-1]
+    $output = $FormatFile
 
-# CHeck for established connection to Management Server  
-CheckMSConnect
+    # Build Header information for output file
+    $body += "<h1>Monitoring Configuration for Server : $Hostname </h1>"
+    $body += "<span class=bold>    Report Generated :</span> $(get-date -format g)</br>"
+}
+Else {
+    # CHeck for established connection to Management Server  
+    CheckMSConnect
+    
+    #Generate Effective Configuration CSV
+    $Hostname = ($AgentFQDN.Split('.'))[0]
+    $output = GetConfig $FolderPath $AgentFQDN
 
-#Generate Effective Configuration CSV
-$output = GetConfig $FolderPath $AgentFQDN
-
-# Build Header information for output file
-$body += "<h1>Monitoring Configuration for Server : $AgentFQDN </h1>"
-$body += "<span class=bold>    Report Generated :</span> $(get-date -format g)</br>"
+    # Build Header information for output file
+    $body += "<h1>Monitoring Configuration for Server : $AgentFQDN </h1>"
+    $body += "<span class=bold>    Report Generated :</span> $(get-date -format g)</br>"
+}
 
 # Get output of configuration CSV
 Write-Host "Formatting Configuration Information for $Hostname " -ForegroundColor Cyan
