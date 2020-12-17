@@ -22,11 +22,11 @@ This script reads the MP Catalog information from 'MPCatalog.xml' and compares t
 **Note 2:** For best results, run this script on the Operations Manager Console.
 
 ## Usage:
-**CheckMPUpdates.ps1** *[-MSConnection ManagementServer] [-InputFile FileName]*
+**CheckMPUpdates.ps1** *[-MSConnection ManagementServer][-InputFile FileName][-View Option]*
 
 [ManagementServer] = Optional parameter.  The Management Server to connect to when obtaining the list of Management Packs.  If no MS is specified, the script will use the existing connection or try to connect to localhost.
 
-[FileName] = Optional parameter.  The full path to the xml file where the Management Pack catalog was saved.  
+[FileName] = Optional parameter.  The full path to the xml file where the Management Pack catalog was saved.  Default catalog file is "C:\SCOMFiles\MPCatalog.xml".
 
 [View] = Optional parameter. Only management packs with published updates are displayed.   
 - _ShowPublished_ : Display all management packs published in the catalog, regardless if they have an update available or not.
@@ -36,11 +36,12 @@ To redirect output to a text file, use this context:
 
 `.\CheckMPUpdates.ps1 MSServer *> .\MG01.Log`
 
-### Download Scripts:   
+## View Scripts    
+_(Right click and select 'Save Link As' to download)_    
 https://github.com/RPesenko/OpsMgr-Scripts/blob/master/MPUPdate/MPCatalogGet.ps1
 https://github.com/RPesenko/OpsMgr-Scripts/blob/master/MPUPdate/CheckMPUpdates.ps1
 
-Change Log  
+## Change Log  
 2.2: Added "View" parameter to display all MP or only updated MP. Defaults to updates available only. Changed default folder for catalog file to "C:\SCOMFiles"  
 2.1: Improvements to Version comparison. Improved MG connection logic   
 1.0: Initial release   
