@@ -8,7 +8,7 @@ This script runs Get-SCOMEffectiveMonitoringConfiguration against an agent and f
 *****Format only option*****  
 **SCOMMonitoringConfig.ps1** *-FormatFile Filepath*
 
-[FormatFile] = Mandatory parameter.  The FQDN of the agent to generate the configuration file for.  
+[FormatFile] = Mandatory parameter.  The full path of the configuraton file to format.  
 
 *****Generate and format option*****  
 **SCOMMonitoringConfig.ps1** *-AgentFQDN FQDN* *[-MS FQDN][-FolderPath Path]*
