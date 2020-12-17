@@ -1,14 +1,19 @@
 <#
 CheckMPUpdates.ps1
     Version: 2.2    
-    Release 2020/12/16
+    Release 2020/12/17
 
 Checks for updates to installed sealed MP from previously downloaded catalog file
+Values for $View:
+            - ShowAll = Display all MP, including those not published in the catalog
+            - ShowPublished = Display status of any MP published in the catalog
+            - [default] Only display MP that have an available update
 #>
 
 Param (
     [string] $MSConnection,
-    [string] $Inputfile = "C:\temp\MPCatalog.xml"
+    [string] $Inputfile = "C:\SCOMFiles\MPCatalog.xml",
+    [string] $View 
 )
 
 function GetSCOMModule ($MgmtServer){
@@ -161,8 +166,11 @@ foreach ($MPitem in $InstalledMPList) {
         $MgmtPackName = $MPitem.Display
     }
 
+    # If MP is not in the catalog, 
     IF (!$Catitem){
-        Write-Host "- " $MgmtPackName " Version: " $MPitem.MPVersion " [No Published Updates]" -ForegroundColor Cyan
+        If ($View -eq "ShowAll"){
+            Write-Host "- " $MgmtPackName " Version: " $MPitem.MPVersion " [No Published Updates]" -ForegroundColor Cyan
+        }
     }
     Else {
         # These are strings so we need a function to compare them
@@ -172,7 +180,9 @@ foreach ($MPitem in $InstalledMPList) {
             Write-Host "- " $MgmtPackName " Version: " $MPitem.MPVersion " [Update Available: " $CatItem.MPVersion "(" $MPReleaseDate ")  ]" -ForegroundColor Yellow
         }
         Else {
-            Write-Host "- " $MgmtPackName " Version: " $MPitem.MPVersion " [Current]" -ForegroundColor Green
+            If (($View -eq "ShowAll") -or ($View -eq "ShowPublished")){
+                Write-Host "- " $MgmtPackName " Version: " $MPitem.MPVersion " [Current]" -ForegroundColor Green
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿<#  
 MPCatalogGet.ps1
-    Version: 1.1    
-    Release 2020/12/16
+    Version: 1.2    
+    Release 2020/12/17
 
 Script to get offline copy of MP Catalog for comparison to installed MP
 Designed for use when MS is not online and native Updates and Recommendation feature can't be used.
@@ -10,7 +10,7 @@ Based on Check-MPUpdates.ps1 by Daniele Muscetta 8/12/2009 (https://www.muscetta
 #>
 
 Param (
-    [string] $Folder = "C:\temp"
+    [string] $Folder = "C:\SCOMFiles"
 )
 
 If (!(Test-path $folder)){
