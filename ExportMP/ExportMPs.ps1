@@ -1,12 +1,12 @@
 ﻿<#
 ExportMPs.ps1
-    Version: 1.1    
-    Release 2020/12/16
+    Version: 2.0    
+    Release 2020/12/17
 
 Script to export all Management Packs
- -Servername = MS to use (default to localhost)
  -Sealed = Export sealed and unsealed MP (default to unsealed only)
- -Folder = Folder to export MP to (default to C:\ManagementPacks)
+ -Servername = MS to use (default to localhost)
+ -Folder = Folder to export MP to (default to C:\SCOMFiles\ManagementPacks)
 #>
 param 
 (
