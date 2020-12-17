@@ -15,7 +15,7 @@ The script uses the folowing parameters:
 #### (Right click and select 'Save Link As' to download)
 https://github.com/RPesenko/OpsMgr-Scripts/blob/master/ExportMP/ExportMPs.ps1
  
-Change Log  
+## Change Log  
 2.0: Improvements to MG connection  
 1.1: Updates to documentation   
 1.0: Initial release  
