@@ -1,14 +1,14 @@
 <#
 SCOMMonitoringConfig
-    Version: 2.1    
-    Release 2020/12/16
+    Version: 2.2    
+    Release 2020/12/17
 Runs Get-SCOMEffectiveMonitoringConfiguration and formats output to HTML 5 compliant file.
 #>
 
   Param (
+    [Parameter(Mandatory=$true)][string] $AgentFQDN,
     [string] $MS,
-    [string] $FolderPath = "C:\ScomConfig\",
-    [Parameter(Mandatory=$true)][string] $AgentFQDN 
+    [string] $FolderPath = "C:\SCOMFiles\ScomConfig\"
 )
 
 # ===============================================================================================

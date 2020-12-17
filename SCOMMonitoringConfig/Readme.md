@@ -1,17 +1,21 @@
 # SCOMMonitoringConfig.ps1
-Version: 2.1    
-Release 2020/12/16
+Version: 2.2    
+Release 2020/12/17
 
 This script runs Get-SCOMEffectiveMonitoringConfiguration against an agent and formats output to HTML 5 compliant file.
 
-The script uses the folowing parameters:
-    - _MS_ = [optional] Name of the Management Server to connect to.  If not is specified, the script will connect to the local machine and attempt to load the OpsMgr Command Shell.  
-    - _FolderPath_ = [optional] The folder to save the raw CSV output and formatted HTML files to.  Default value is _C:\SCOMConfig_
-    - _AgentFQDN_ = [Mandatory] The FQDN of the agent to generate the configuration file for.  
+## Usage:
+**SCOMMonitoringConfig.ps1** *[-AgentFQDN FQDN][-MS FQDN][-FolderPath Path]*
 
-### Download Script Here 
+[AgentFQDN] = Mandatory parameter.  The FQDN of the agent to generate the configuration file for.  
+[MS] = Optional parameter.  Name of the Management Server to connect to.  If not is specified, the script will connect to the local machine and attempt to load the OpsMgr Command Shell.  
+[FolderPath] = Optional parameter.  The folder to save the raw CSV output and formatted HTML files to.  Default value is _C:\SCOMFiles\SCOMConfig_.  
+    
+## View Script    
+_(Right click and select 'Save Link As' to download)_    
 https://github.com/RPesenko/OpsMgr-Scripts/blob/master/SCOMMonitoringConfig/SCOMMonitoringConfig.ps1
  
-Change Log  
+## Change Log  
+2.2: Updated script defaults
 2.1: Improved MG connection logic   
 1.0: Initial release    
