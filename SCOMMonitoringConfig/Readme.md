@@ -16,6 +16,6 @@ _(Right click and select 'Save Link As' to download)_
 https://github.com/RPesenko/OpsMgr-Scripts/blob/master/SCOMMonitoringConfig/SCOMMonitoringConfig.ps1
  
 ## Change Log  
-2.2: Updated script defaults
+2.2: Updated script defaults    
 2.1: Improved MG connection logic   
 1.0: Initial release    
