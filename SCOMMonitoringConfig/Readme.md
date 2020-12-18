@@ -14,7 +14,7 @@ This script runs Get-SCOMEffectiveMonitoringConfiguration against an agent and f
 **SCOMMonitoringConfig.ps1** *-AgentFQDN FQDN* *[-MS FQDN][-FolderPath Path]*
 
 [AgentFQDN] = Mandatory parameter.  The FQDN of the agent to generate the configuration file for.  
-[MS] = Optional parameter.  Name of the Management Server to connect to.  If not is specified, the script will connect to the local machine and attempt to load the OpsMgr Command Shell.  
+[MS] = Optional parameter.  Name of the Management Server to connect to.  If not specified, the script will connect to the local machine and attempt to load the OpsMgr Command Shell.  
 [FolderPath] = Optional parameter.  The folder to save the raw CSV output and formatted HTML files to.  Default value is _C:\SCOMFiles\SCOMConfig_.  
     
 **Note:** Either the FormatFile or AgentFQDN parameter will need to be passed to the script.
