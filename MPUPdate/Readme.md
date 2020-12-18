@@ -10,7 +10,7 @@ This script is used to connect to the Management Pack Catalog web service and pu
 [Foldername] = Optional parameter.  Folder to save the 'MPCatalog.xml' file.  By default, this file is saved to "C:\SCOMFiles".  
 
 
-# CheckMPUdates.ps1
+# CheckMPUpdates.ps1
 Version: 2.2    
 Release 2020/12/17 
 
