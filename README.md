@@ -5,8 +5,6 @@ A collection of useful PowerShell scripts for Operations Manager administrators
 
 **ExtendMM** : Script to display, end or modify existing SCOM Maintenance Mode windows.  
 
-**List_Schan** : List or modify SChannel protocol settings on the local server.
-
 **MMAlert** : Script to alert when a long Maintenance Mode window is ending in less than 24 hours.
 
 **MPUpdate** : Scripts to identify Management Pack updates for offline SCOM Management Groups
@@ -15,4 +13,4 @@ A collection of useful PowerShell scripts for Operations Manager administrators
 
 **SCOM_MG_Config** : Add, Remove or Display SCOM MG for CSV list of computers
 
-**ShowTLSStatus** : Quickly displays key registry values related to TLS 1.2 only configuration
+**ShowTLSStatus** : List or modify SChannel protocol settings on the local server. Quickly displays key registry values related to TLS 1.2 only configuration
