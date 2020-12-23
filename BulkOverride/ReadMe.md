@@ -1,5 +1,5 @@
 # BulkOverride.ps1
-    Version: 1.0
+    Version: 0.5  - _in progress_
     Release 2020/12/23
   
 This script runs Get-SCOMEffectiveMonitoringConfiguration against an agent, or takes a previously generated CSV file, and presents all the currently enabled rules and monitors in a PowerShell Gridview object.  Enabled rules and monitors can be selected from the gridview and a single override MP can be generated to disable the selected workflows.
