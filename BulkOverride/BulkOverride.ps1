@@ -1,10 +1,11 @@
 <#
 BulkOveride.ps1
-    Version: 0.5 - in progress  
-    Release 2020/12/23
+    Version: 0.9 - in progress  
+    Release 2020/12/25
 Runs Get-SCOMEffectiveMonitoringConfiguration against an agent, or takes a previously generated CSV file, and presents all the currently enabled rules and monitors
  in a PowerShell Gridview object.  Enabled rules and monitors can be selected from the gridview and a single override MP can be generated to disable the selected workflows. 
 #>
+
 [CmdletBinding(DefaultParameterSetName = 'GetConfig')]
 Param (
     [Parameter(Mandatory=$true,ParameterSetName='UseExisting',HelpMessage='Enter a configuration file to use.')][string] $ConfigFile,
@@ -203,6 +204,7 @@ $lines | foreach {
         $Workflows += $workflow
     }
 }
+
 # Present Enabled workflow information and select workflows to disable
 $selected = $Workflows | ? {$_.WorkflowType -ne "Rollup Monitor"} |Select Class, Instance, WorkflowID, WorkflowType, MakesAlert |Out-GridView -OutputMode Multiple
 
@@ -223,9 +225,6 @@ foreach ($ruleitem in $colRules){
     $override.Context = $Target
     $override.DisplayName = $overridename   
 }
-$overrideMp.Verify()
-$overrideMp.AcceptChanges()
-
 
 # Override the Monitors
 $colMonitors = $Workflows | ? {$_.WorkflowID -in $selected.WorkflowID} | ? {$_.Type -eq "Monitor"} 
@@ -241,6 +240,8 @@ foreach ($monitoritem in $colMonitors){
     $override.Context = $Target
     $override.DisplayName = $overridename 
 }
+
+# Save overrides to MP
 $overrideMp.Verify()
 $overrideMp.AcceptChanges()
 
