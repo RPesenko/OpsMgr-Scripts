@@ -10,7 +10,9 @@ Param (
     [Parameter(Mandatory=$true,ParameterSetName='UseExisting',HelpMessage='Enter a configuration file to use.')][string] $ConfigFile,
     [Parameter(Mandatory=$true,ParameterSetName='GetConfig',HelpMessage='Enter an agent FQDN to use.')][string] $AgentFQDN,
     [Parameter(ParameterSetName='GetConfig')][string] $MS,
-    [Parameter(ParameterSetName='GetConfig')][string] $FolderPath = "C:\SCOMFiles\BulkOverride\"
+    [Parameter(ParameterSetName='GetConfig')][string] $FolderPath = "C:\SCOMFiles\BulkOverride\",
+    [Parameter(Mandatory=$true,ParameterSetName='UseExisting')]
+    [Parameter(Mandatory=$true,ParameterSetName='GetConfig',HelpMessage='Enter the Override MP Name')][string] $MP
 )
 
 # ===============================================================================================
@@ -177,7 +179,7 @@ $lines | foreach {
     # Progress bar
     $i += 1
     $progress = ($i/$total)*100
-    Write-Progress -Activity "Loading Workflows" -PercentComplete $progress
+    Write-Progress -Activity "Loading Workflows" -PercentComplete $progress 
 
     $values = $null
     $values = ($_).Split('|')  
@@ -193,6 +195,7 @@ $lines | foreach {
             MakesAlert =  $values[4]
             AlertSev = $values[5]
             AlertPri = $values[6]
+            Type = $values[7]
             WorkflowType = (GetWorkflowType $values[7] $values[4] $values[2] $values[8] )
             Description = $values[8]
             Overridden = $values[9]
@@ -200,6 +203,44 @@ $lines | foreach {
         $Workflows += $workflow
     }
 }
-# Display Enabled workflow information
-$selected = $Workflows | Select Class, Instance, WorkflowID, WorkflowType, MakesAlert |Out-GridView -OutputMode Multiple
-$selected |Out-GridView -Title "These were selected"
+# Present Enabled workflow information and select workflows to disable
+$selected = $Workflows | ? {$_.WorkflowType -ne "Rollup Monitor"} |Select Class, Instance, WorkflowID, WorkflowType, MakesAlert |Out-GridView -OutputMode Multiple
+
+# Get the override MP
+$overrideMp= Get-SCOMManagementPack -Displayname $MP
+
+# Override the rules
+$colRules = $Workflows | ? {$_.WorkflowID -in $selected.WorkflowID} | ? {$_.Type -eq "Rule"}
+foreach ($ruleitem in $colRules){
+    $rule = Get-SCOMRule -Name $ruleitem.WorkflowID
+    Write-Host "Creating rule override for " $rule.DisplayName -ForegroundColor Yellow
+    $Target= Get-SCOMClass -id $rule.Target.id
+    $overridename=$rule.Name + ".Override"
+    $override = New-Object Microsoft.EnterpriseManagement.Configuration.Management`PackRulePropertyOverride($overrideMp,$overridename)
+    $override.Rule = $rule
+    $Override.Property = 'Enabled'
+    $override.Value = 'false'
+    $override.Context = $Target
+    $override.DisplayName = $overridename   
+}
+$overrideMp.Verify()
+$overrideMp.AcceptChanges()
+
+
+# Override the Monitors
+$colMonitors = $Workflows | ? {$_.WorkflowID -in $selected.WorkflowID} | ? {$_.Type -eq "Monitor"} 
+foreach ($monitoritem in $colMonitors){
+    $monitor = Get-SCOMMonitor -Name $monitoritem.WorkflowID
+    Write-Host "Creating monitor override for" $monitor.DisplayName -ForegroundColor Yellow
+    $Target= Get-SCOMClass -id $Monitor.Target.id
+    $overridename=$monitor.Name + ".Override"
+    $override = New-Object Microsoft.EnterpriseManagement.Configuration.ManagementPackMonitorPropertyOverride($overrideMp,$overridename)
+    $override.Monitor = $Monitor
+    $Override.Property = 'Enabled'
+    $override.Value = 'false'
+    $override.Context = $Target
+    $override.DisplayName = $overridename 
+}
+$overrideMp.Verify()
+$overrideMp.AcceptChanges()
+
