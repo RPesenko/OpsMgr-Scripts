@@ -93,6 +93,18 @@ function GetConfig ($FolderPath, $AgentFQDN) {
     return $outfile
 }
 
+function verifymp ($MP){
+    $OMP = Get-SCOMManagementPack -Displayname $MP
+    If ($OMP){
+        Write-Host "Writing overrides to" $OMP.DisplayName -ForegroundColor Cyan
+        Return $OMP
+    }
+    Else {
+        Write-Host "Cannot retrieve override management pack" -ForegroundColor Red
+        Exit
+    }
+}
+
 function GetSCOMModule ($MgmtServer){
     $Server = $MgmtServer
     Try {
@@ -154,17 +166,21 @@ function CheckMSConnect {
 # MAIN
 # Check for established connection to Management Server  
     CheckMSConnect
-    
+
+# Get the override MP
+    $overrideMp = verifymp $MP
+
 # Don't connect to MS if just formatting an existing file
 If ($ConfigFile) {
     $Hostname = (($ConfigFile.Split('.')[0]).Split('\'))[-1]
     $output = $ConfigFile
 }
 Else {
-    #Generate Effective Configuration CSV
+    # Generate Effective Configuration CSV
+    # Wait 5 seconds for cmdlet to clean up before continuing.
     $Hostname = ($AgentFQDN.Split('.'))[0]
     $output = GetConfig $FolderPath $AgentFQDN
-    Start-Sleep 4
+    Start-Sleep 5
 }
 
 # Get output of configuration CSV
@@ -204,44 +220,58 @@ $lines | foreach {
         $Workflows += $workflow
     }
 }
+Write-Progress -Activity "Loading Workflows" -Completed
 
 # Present Enabled workflow information and select workflows to disable
 $selected = $Workflows | ? {$_.WorkflowType -ne "Rollup Monitor"} |Select Class, Instance, WorkflowID, WorkflowType, MakesAlert |Out-GridView -OutputMode Multiple
 
-# Get the override MP
-$overrideMp= Get-SCOMManagementPack -Displayname $MP
-
 # Override the rules
 $colRules = $Workflows | ? {$_.WorkflowID -in $selected.WorkflowID} | ? {$_.Type -eq "Rule"}
-foreach ($ruleitem in $colRules){
-    $rule = Get-SCOMRule -Name $ruleitem.WorkflowID
-    Write-Host "Creating rule override for " $rule.DisplayName -ForegroundColor Yellow
-    $Target= Get-SCOMClass -id $rule.Target.id
-    $overridename=$rule.Name + ".Override"
-    $override = New-Object Microsoft.EnterpriseManagement.Configuration.Management`PackRulePropertyOverride($overrideMp,$overridename)
-    $override.Rule = $rule
-    $Override.Property = 'Enabled'
-    $override.Value = 'false'
-    $override.Context = $Target
-    $override.DisplayName = $overridename   
+$ovRules = $colRules.Count
+If ($ovRules -gt 0){
+    Write-Host "Creating overrides for $ovRules rules...." -ForegroundColor Cyan
+    foreach ($ruleitem in $colRules){
+        $rule = Get-SCOMRule -Name $ruleitem.WorkflowID
+        Write-Host "Creating rule override for " $rule.DisplayName -ForegroundColor Yellow
+        $Target= Get-SCOMClass -id $rule.Target.id
+        $overridename=$rule.Name + ".Override"
+        $override = New-Object Microsoft.EnterpriseManagement.Configuration.Management`PackRulePropertyOverride($overrideMp,$overridename)
+        $override.Rule = $rule
+        $Override.Property = 'Enabled'
+        $override.Value = 'false'
+        $override.Context = $Target
+        $override.DisplayName = $overridename   
+    }
+    Write-Host "Rule overrides complete" -ForegroundColor Green
 }
 
 # Override the Monitors
 $colMonitors = $Workflows | ? {$_.WorkflowID -in $selected.WorkflowID} | ? {$_.Type -eq "Monitor"} 
-foreach ($monitoritem in $colMonitors){
-    $monitor = Get-SCOMMonitor -Name $monitoritem.WorkflowID
-    Write-Host "Creating monitor override for" $monitor.DisplayName -ForegroundColor Yellow
-    $Target= Get-SCOMClass -id $Monitor.Target.id
-    $overridename=$monitor.Name + ".Override"
-    $override = New-Object Microsoft.EnterpriseManagement.Configuration.ManagementPackMonitorPropertyOverride($overrideMp,$overridename)
-    $override.Monitor = $Monitor
-    $Override.Property = 'Enabled'
-    $override.Value = 'false'
-    $override.Context = $Target
-    $override.DisplayName = $overridename 
+$ovMon = $colMonitors.Count
+If ($ovMon -gt 0){
+    Write-Host "Creating overrides for $ovMon monitors...." -ForegroundColor Cyan
+    foreach ($monitoritem in $colMonitors){
+        $monitor = Get-SCOMMonitor -Name $monitoritem.WorkflowID
+        Write-Host "Creating monitor override for" $monitor.DisplayName -ForegroundColor Yellow
+        $Target= Get-SCOMClass -id $Monitor.Target.id
+        $overridename=$monitor.Name + ".Override"
+        $override = New-Object Microsoft.EnterpriseManagement.Configuration.ManagementPackMonitorPropertyOverride($overrideMp,$overridename)
+        $override.Monitor = $Monitor
+        $Override.Property = 'Enabled'
+        $override.Value = 'false'
+        $override.Context = $Target
+        $override.DisplayName = $overridename 
+    }
+    Write-Host "Monitor overrides complete" -ForegroundColor Green
 }
 
 # Save overrides to MP
-$overrideMp.Verify()
-$overrideMp.AcceptChanges()
-
+Try {
+    $overrideMp.Verify()
+    $overrideMp.AcceptChanges()
+    Write-Host "Override Management Pack imported" -ForegroundColor Green
+}
+Catch {
+    Write-Host "Management Pack Import error" -ForegroundColor Red
+    Write-Host $_.Exception.Message -ForegroundColor Red
+}
