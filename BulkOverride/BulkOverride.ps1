@@ -1,7 +1,7 @@
 <#
 BulkOveride.ps1
-    Version: 0.9 - in progress  
-    Release 2020/12/25
+    Version: 1.0  
+    Release 2020/12/27
 Runs Get-SCOMEffectiveMonitoringConfiguration against an agent, or takes a previously generated CSV file, and presents all the currently enabled rules and monitors
  in a PowerShell Gridview object.  Enabled rules and monitors can be selected from the gridview and a single override MP can be generated to disable the selected workflows. 
 #>
@@ -10,10 +10,11 @@ Runs Get-SCOMEffectiveMonitoringConfiguration against an agent, or takes a previ
 Param (
     [Parameter(Mandatory=$true,ParameterSetName='UseExisting',HelpMessage='Enter a configuration file to use.')][string] $ConfigFile,
     [Parameter(Mandatory=$true,ParameterSetName='GetConfig',HelpMessage='Enter an agent FQDN to use.')][string] $AgentFQDN,
-    [Parameter(ParameterSetName='GetConfig')][string] $MS,
-    [Parameter(ParameterSetName='GetConfig')][string] $FolderPath = "C:\SCOMFiles\BulkOverride\",
     [Parameter(Mandatory=$true,ParameterSetName='UseExisting')]
-    [Parameter(Mandatory=$true,ParameterSetName='GetConfig',HelpMessage='Enter the Override MP Name')][string] $MP
+    [Parameter(Mandatory=$true,ParameterSetName='GetConfig',HelpMessage='Enter the Override MP Display Name')][string] $MP,
+    [Parameter(Mandatory=$true,ParameterSetName='UseExisting')]
+    [Parameter(ParameterSetName='GetConfig',HelpMessage='Enter the FQDN of the MS to connect to.')][string] $MS,
+    [Parameter(ParameterSetName='GetConfig')][string] $FolderPath = "C:\SCOMFiles\BulkOverride\"
 )
 
 # ===============================================================================================
@@ -220,6 +221,7 @@ $lines | foreach {
         $Workflows += $workflow
     }
 }
+# CLose progress bar
 Write-Progress -Activity "Loading Workflows" -Completed
 
 # Present Enabled workflow information and select workflows to disable
