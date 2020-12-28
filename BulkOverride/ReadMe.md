@@ -28,7 +28,8 @@ Aggregate monitors and dependency monitors are currently presented as potential 
 
 ## View Script    
 _(Right click and select 'Save Link As' to download)_    
-https://github.com/RPesenko/OpsMgr-Scripts/blob/master/BulkOverride/Bulkoverride.ps1
- 
+https://github.com/RPesenko/OpsMgr-Scripts/blob/master/BulkOverride/BulkOverride.ps1
+
+
 ## Change Log  
 1.0: Initial release  
