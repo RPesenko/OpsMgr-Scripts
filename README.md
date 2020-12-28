@@ -1,7 +1,7 @@
 # OpsMgr-Scripts
 A collection of useful PowerShell scripts for Operations Manager administrators
 
-**BulkOverride** : Run the _Get-SCOMEffectiveMonitoringConfiguration_ cmelet against an agent, or use a previously generated CSV output file, and generate a single override MP to disable whatever enabled rules and monitors are selected.
+**BulkOverride** : Run the _Export-SCOMEffectiveMonitoringConfiguration_ cmelet against an agent, or use a previously generated CSV output file, and generate a single override MP to disable whatever enabled rules and monitors are selected.
 
 **ExportMPs** : Export Sealed and Unsealed Management Packs
 
