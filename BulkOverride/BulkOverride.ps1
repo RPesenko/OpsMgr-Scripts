@@ -19,6 +19,32 @@ Param (
 
 # ===============================================================================================
 # functions
+function GetParentMP {
+    param (
+        [string] $type,
+        [string] $ID
+    )
+    If ($type -eq 'rule'){
+        $MPID = (Get-SCOMRule -Name $ID).ManagementPackName
+        $parentMP = $MPHash.$MPID
+    }
+    Else {
+        $parentMP = ((Get-SCOMMonitor -Name $ID).GetManagementPack()).DisplayName
+    }
+    Return $parentMP
+}
+
+function GetMPHash {
+    # Make one call to the SDK for MP display names
+    $MPTable = @{}
+    $MPList = Get-SCOMManagementPack 
+    Foreach ($MPitem in $MPList) {
+        $MPTable.Add($MPitem.Name, $MPitem.DisplayName)
+    }
+
+    Return $MPTable
+}
+
 function GetWorkflowType {
     Param (
         [string] $type,
@@ -166,10 +192,13 @@ function CheckMSConnect {
 #---------------------------------------------------------------------
 # MAIN
 # Check for established connection to Management Server  
-    CheckMSConnect
+CheckMSConnect
 
 # Get the override MP
-    $overrideMp = verifymp $MP
+$overrideMp = verifymp $MP
+
+# Populate has table of MP display names for efficiency
+$MPHash = GetMPHash
 
 # Don't connect to MS if just formatting an existing file
 If ($ConfigFile) {
@@ -215,6 +244,7 @@ $lines | foreach {
             AlertPri = $values[6]
             Type = $values[7]
             WorkflowType = (GetWorkflowType $values[7] $values[4] $values[2] $values[8] )
+            ParentMP = (GetParentMP $values[7] $values[2])
             Description = $values[8]
             Overridden = $values[9]
         }
@@ -225,7 +255,7 @@ $lines | foreach {
 Write-Progress -Activity "Loading Workflows" -Completed
 
 # Present Enabled workflow information and select workflows to disable
-$selected = $Workflows | ? {$_.WorkflowType -ne "Rollup Monitor"} |Select Class, Instance, WorkflowID, WorkflowType, MakesAlert |Out-GridView -OutputMode Multiple
+$selected = $Workflows | ? {$_.WorkflowType -ne "Rollup Monitor"} |Select Class, Instance, WorkflowID, WorkflowType, MakesAlert, parentMP |Out-GridView -OutputMode Multiple
 
 # Override the rules
 $colRules = $Workflows | ? {$_.WorkflowID -in $selected.WorkflowID} | ? {$_.Type -eq "Rule"}
