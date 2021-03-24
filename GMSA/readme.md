@@ -15,3 +15,4 @@ If your Database and Datawarehouse are hosted by the same SQL instance, you only
 ## View Scripts    
 _(Right click and select 'Save Link As' to download)_    
 https://github.com/RPesenko/OpsMgr-Scripts/blob/master/GMSA/Users%20and%20Roles.sql
+
