@@ -11,3 +11,7 @@ This script can be used to automate the required changes for your own environmen
    - Replace the string "OMRep_GMSA$" with your DataWarehouse Data Reader account name.
 
 If your Database and Datawarehouse are hosted by the same SQL instance, you only need to create a login and user for each account once.  If your Report Server databases are hosted on the same SQL instance as the Datawarehouse, the command to create the login for the OMRep_GMSA$ does not have to be run a second time, but you will still create the user and add roles on each db.
+
+## View Scripts    
+_(Right click and select 'Save Link As' to download)_    
+https://github.com/RPesenko/OpsMgr-Scripts/blob/master/GMSA/Users%20and%20Roles.sql
