@@ -4,6 +4,7 @@ https://docs.microsoft.com/en-us/system-center/scom/database-changes?view=sc-om-
 
 This script can be used to automate the required changes for your own environment.
    - Replace the string "Contoso" with your domain name
+   - Replace the string 'CONTOSO_MG' with the name of the SCOM management group
    - Replace the string "OMMSAA_GMSA$" with your Management Server Action Account name.
    - Replace the string "OMSDK_GMSA$" with your Data Access Service/Config Service account name.
    - Replace the string "OMDW_GMSA$" with your DataWarehouse Data Writer account name.
