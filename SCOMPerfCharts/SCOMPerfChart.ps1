@@ -3,7 +3,7 @@
    Creates one chart per agent in MG
    Uses .Net Chart controls to format chart
    Output saved as .PNG file
-#>
+#> 
 
 [void][Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms.DataVisualization")
 $SQLServer = "SQL1"  
