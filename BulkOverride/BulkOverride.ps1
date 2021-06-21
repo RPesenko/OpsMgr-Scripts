@@ -2,8 +2,9 @@
 BulkOveride.ps1
     Version: 1.1  
     Release 2021/1/19
-Runs             Export-SCOMEffectiveMonitoringConfiguration  against an agent, or takes a previously generated CSV file, and presents all the currently enabled rules and monitors
- in a PowerShell Gridview object.  Enabled rules and monitors can be selected from the gridview and a single override MP can be generated to disable the selected workflows. 
+    Runs Export-SCOMEffectiveMonitoringConfiguration  against an agent, or takes a previously generated CSV file, 
+    and presents all the currently enabled rules and monitors in a PowerShell Gridview object.  Enabled rules and 
+    monitors can be selected from the gridview and a single override MP can be generated to disable the selected workflows. 
 #>
 
 [CmdletBinding(DefaultParameterSetName = 'GetConfig')]

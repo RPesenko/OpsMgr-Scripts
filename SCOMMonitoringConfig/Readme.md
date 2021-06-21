@@ -2,7 +2,7 @@
 Version: 2.3    
 Release 2020/12/17
 
-This script runs             Export-SCOMEffectiveMonitoringConfiguration  against an agent and formats output to HTML 5 compliant file.  It can optionally format a previously generated CSV file created by the             Export-SCOMEffectiveMonitoringConfiguration  cmdlet.
+This script runs Export-SCOMEffectiveMonitoringConfiguration  against an agent and formats output to HTML 5 compliant file.  It can optionally format a previously generated CSV file created by the             Export-SCOMEffectiveMonitoringConfiguration  cmdlet.
 
 ## Usage:
 *****Format only option*****  
