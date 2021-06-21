@@ -15,6 +15,6 @@ A collection of useful PowerShell scripts for Operations Manager administrators
 
 **SCOM_MG_Config** : Add, Remove or Display SCOM MG for CSV list of computers
 
-**SCOMMonitoringConfig** : Run the _Get-SCOMEffectiveMonitoringConfiguration_ cmelet against an agent and format output to HTML 5 compliant file. It can optionally format a previously generated CSV file created by the Get-SCOMEffectiveMonitoringConfiguration cmdlet.
+**SCOMMonitoringConfig** : Run the _            Export-SCOMEffectiveMonitoringConfiguration _ cmelet against an agent and format output to HTML 5 compliant file. It can optionally format a previously generated CSV file created by the             Export-SCOMEffectiveMonitoringConfiguration  cmdlet.
 
 **ShowTLSStatus** : List or modify SChannel protocol settings on the local server. Quickly displays key registry values related to TLS 1.2 only configuration

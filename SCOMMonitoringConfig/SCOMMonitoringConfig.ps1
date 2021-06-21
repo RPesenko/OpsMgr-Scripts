@@ -2,7 +2,7 @@
 SCOMMonitoringConfig
     Version: 2.3    
     Release 2020/12/17
-Runs Get-SCOMEffectiveMonitoringConfiguration and formats output to HTML 5 compliant file.
+Runs             Export-SCOMEffectiveMonitoringConfiguration  and formats output to HTML 5 compliant file.
 #>
 
   Param (
